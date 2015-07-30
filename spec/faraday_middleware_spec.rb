@@ -19,7 +19,7 @@ describe OverallRequestTimes::FaradayMiddleware do
   let(:remote_app_name) { :cats }
   let(:env) { {} }
 
-  subject { OverallRequestTimes::FaradayMiddleware.new(app, remote_app_name) }
+  subject { described_class.new(app, remote_app_name) }
 
   it 'starts with a total of zero' do
     expect(subject.total).to eq(0)
@@ -38,6 +38,12 @@ describe OverallRequestTimes::FaradayMiddleware do
     subject.add(10)
     subject.reset!
     expect(subject.total).to eq(0)
+  end
+
+  it 'registers itself with the registry' do
+    allow(OverallRequestTimes).to receive(:register)
+    subject
+    expect(OverallRequestTimes).to have_received(:register).with(subject)
   end
 
   describe '#call' do

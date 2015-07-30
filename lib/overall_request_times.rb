@@ -1,5 +1,6 @@
 require "overall_request_times/version"
 require "overall_request_times/faraday_middleware"
+require "overall_request_times/generic_timer"
 
 module OverallRequestTimes
   def self.wipeout_registry
