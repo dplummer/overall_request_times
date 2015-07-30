@@ -1,5 +1,7 @@
 # OverallRequestTimes
 
+[![Build Status](https://travis-ci.org/dplummer/overall_request_times.svg?branch=master)](https://travis-ci.org/dplummer/overall_request_times)
+
 A library for recording the total time spent each request on the HTTP request
 for a given service. Useful if you use several HTTP backends in each request
 and want to log the total time spent in each in your Rails log, like the db
