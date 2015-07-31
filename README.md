@@ -46,6 +46,14 @@ OverallRequestTimes.bm(:remote_service_name) do
 end
 ```
 
+or
+
+```ruby
+OverallRequestTimes.start(:remote_service_name)
+# this takes a while, maybe moving to a different method?
+OverallRequestTimes.stop(:remote_service_name)
+```
+
 Then to extract the totals to log:
 
 ```ruby

@@ -28,12 +28,20 @@ module OverallRequestTimes
   end
 
   def self.bm(remote_app_name, &block)
-    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
-    registry[remote_app_name].start
+    start(remote_app_name)
     begin
       block.call
     ensure
-      registry[remote_app_name].stop
+      stop(remote_app_name)
     end
+  end
+
+  def self.start(remote_app_name)
+    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
+    registry[remote_app_name].start
+  end
+
+  def self.stop(remote_app_name)
+    registry[remote_app_name] && registry[remote_app_name].stop
   end
 end

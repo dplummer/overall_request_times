@@ -5,6 +5,10 @@ describe OverallRequestTimes do
     OverallRequestTimes.wipeout_registry
   end
 
+  after(:each) do
+    Timecop.return
+  end
+
   it 'has a version number' do
     expect(OverallRequestTimes::VERSION).not_to be nil
   end
@@ -64,8 +68,6 @@ describe OverallRequestTimes do
       end
 
       expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(12)
-
-      Timecop.return
     end
 
     it 'records the timing even if the code explodes' do
@@ -79,8 +81,31 @@ describe OverallRequestTimes do
       end.to raise_error(error)
 
       expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(5)
+    end
+  end
 
-      Timecop.return
+  describe '.start and .stop' do
+    it 'records for a app, creating one if needed' do
+      OverallRequestTimes.start(:cats)
+      Timecop.travel(Time.now + 5)
+      OverallRequestTimes.stop(:cats)
+
+      expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(5)
+    end
+
+    it "does not complain if it wasn't started" do
+      expect(OverallRequestTimes.stop(:dogs)).to eq(nil)
+    end
+
+    it 'works with existing registered timers' do
+      timer = OverallRequestTimes::GenericTimer.new(:cats)
+      OverallRequestTimes.register(timer)
+
+      OverallRequestTimes.start(:cats)
+      Timecop.travel(Time.now + 5)
+      OverallRequestTimes.stop(:cats)
+
+      expect(timer.total).to be_within(0.01).of(5)
     end
   end
 end
