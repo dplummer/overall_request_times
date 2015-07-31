@@ -26,4 +26,14 @@ module OverallRequestTimes
     timer = registry[remote_app_name]
     timer ? timer.total : 0
   end
+
+  def self.bm(remote_app_name, &block)
+    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
+    registry[remote_app_name].start
+    begin
+      block.call
+    ensure
+      registry[remote_app_name].stop
+    end
+  end
 end

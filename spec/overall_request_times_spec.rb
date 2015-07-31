@@ -52,4 +52,35 @@ describe OverallRequestTimes do
       expect(OverallRequestTimes.total_for(:nope)).to eq(0)
     end
   end
+
+  describe '.bm' do
+    it 'benchmarks a block' do
+      OverallRequestTimes.bm(:cats) do
+        Timecop.travel(Time.now + 5)
+      end
+
+      OverallRequestTimes.bm(:cats) do
+        Timecop.travel(Time.now + 7)
+      end
+
+      expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(12)
+
+      Timecop.return
+    end
+
+    it 'records the timing even if the code explodes' do
+      error = StandardError.new('blowing up')
+
+      expect do
+        OverallRequestTimes.bm(:cats) do
+          Timecop.travel(Time.now + 5)
+          raise error
+        end
+      end.to raise_error(error)
+
+      expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(5)
+
+      Timecop.return
+    end
+  end
 end
