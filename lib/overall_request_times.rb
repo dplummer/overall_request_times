@@ -2,6 +2,8 @@ require "overall_request_times/version"
 require "overall_request_times/timer"
 require "overall_request_times/faraday_middleware"
 require "overall_request_times/generic_timer"
+require "overall_request_times/rails_middleware"
+require "overall_request_times/railtie" if defined?(Rails)
 
 module OverallRequestTimes
   def self.wipeout_registry

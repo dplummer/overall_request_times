@@ -58,6 +58,9 @@ And reset the totals at the start of your request cycle:
 OverallRequestTimes.reset!
 ```
 
+If you're using Rails, the reset call isn't needed, since there's a Railtie
+that adds a middleware to do that.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
