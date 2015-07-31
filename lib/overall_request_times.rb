@@ -1,4 +1,5 @@
 require "overall_request_times/version"
+require "overall_request_times/timer"
 require "overall_request_times/faraday_middleware"
 require "overall_request_times/generic_timer"
 

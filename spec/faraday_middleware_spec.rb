@@ -53,11 +53,8 @@ describe OverallRequestTimes::FaradayMiddleware do
     end
 
     it 'records the time it takes before the call completes' do
-      now = Time.now
-      Timecop.travel(now)
-
       app.do_this_before_complete = -> {
-        Timecop.travel(now + 5)
+        Timecop.travel(Time.now + 5)
       }
 
       subject.call(env)
