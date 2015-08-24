@@ -108,4 +108,11 @@ describe OverallRequestTimes do
       expect(timer.total).to be_within(0.01).of(5)
     end
   end
+
+  describe '.add_duration' do
+    it 'records the duration' do
+      OverallRequestTimes.add_duration(:cats, 123)
+      expect(OverallRequestTimes.total_for(:cats)).to be_within(0.01).of(123)
+    end
+  end
 end

@@ -44,4 +44,9 @@ module OverallRequestTimes
   def self.stop(remote_app_name)
     registry[remote_app_name] && registry[remote_app_name].stop
   end
+
+  def self.add_duration(remote_app_name, duration_in_seconds)
+    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
+    registry[remote_app_name].add(duration_in_seconds)
+  end
 end
