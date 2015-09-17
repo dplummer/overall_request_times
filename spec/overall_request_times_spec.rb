@@ -57,6 +57,21 @@ describe OverallRequestTimes do
     end
   end
 
+  describe '.totals' do
+    it 'returns a hash of the total for each timer' do
+      timer = double('timer', remote_app_name: :cats, total: 101)
+      OverallRequestTimes.register(timer)
+      timer = double('timer', remote_app_name: :dogs, total: 106)
+      OverallRequestTimes.register(timer)
+
+      expect(OverallRequestTimes.totals).to eq(cats: 101, dogs: 106)
+    end
+
+    it "returns no times if there are no registered timers" do
+      expect(OverallRequestTimes.totals).to eq({})
+    end
+  end
+
   describe '.bm' do
     it 'benchmarks a block' do
       OverallRequestTimes.bm(:cats) do

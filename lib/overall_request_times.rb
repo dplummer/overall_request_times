@@ -28,6 +28,12 @@ module OverallRequestTimes
     timer ? timer.total : 0
   end
 
+  def self.totals
+    registry.each_with_object({}) do |(remote_app_name, timer), acc|
+      acc[remote_app_name] = timer.total
+    end
+  end
+
   def self.bm(remote_app_name, &block)
     start(remote_app_name)
     begin
