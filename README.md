@@ -10,9 +10,9 @@ time.
 Includes a [Faraday](https://github.com/lostisland/faraday) middleware and
 generic implimentation.
 
-## WARNING
+## Threadsafety
 
-I do not know if this is threadsafe yet. Assume it is not.
+It's got mutexes, so it might be threadsafe. No guarantees.
 
 ## Installation
 

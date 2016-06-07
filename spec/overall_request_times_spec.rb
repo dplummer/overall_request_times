@@ -14,25 +14,25 @@ describe OverallRequestTimes do
   end
 
   it 'starts with an empty registry' do
-    expect(OverallRequestTimes.registry).to eq({})
+    expect(OverallRequestTimes.registry).to be_a(OverallRequestTimes::Registry)
+    expect(OverallRequestTimes.registry.size).to eq(0)
   end
 
   describe '.wipeout_registry' do
     it 'clears the registry' do
-      expect(OverallRequestTimes.registry).to eq({})
       timer = double('timer', remote_app_name: :cats)
       OverallRequestTimes.register(timer)
-      expect(OverallRequestTimes.registry).to eq(cats: timer)
+      expect(OverallRequestTimes.registry.size).to eq(1)
       OverallRequestTimes.wipeout_registry
-      expect(OverallRequestTimes.registry).to eq({})
+      expect(OverallRequestTimes.registry.size).to eq(0)
     end
   end
 
   describe '.register' do
     it 'holds onto the timer by the app name' do
-      timer = double('timer', remote_app_name: :cats)
+      timer = double('timer', remote_app_name: :cats, total: 12)
       OverallRequestTimes.register(timer)
-      expect(OverallRequestTimes.registry[:cats]).to eq(timer)
+      expect(OverallRequestTimes.registry.total_for(:cats)).to eq(12)
     end
   end
 

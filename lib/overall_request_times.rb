@@ -6,54 +6,47 @@ module OverallRequestTimes
   autoload :FaradayMiddleware, "overall_request_times/faraday_middleware"
   autoload :GenericTimer, "overall_request_times/generic_timer"
   autoload :RailsMiddleware, "overall_request_times/rails_middleware"
-
-  def self.wipeout_registry
-    @registry = nil
-  end
+  autoload :Registry, "overall_request_times/registry"
 
   def self.registry
-    @registry ||= {}
+    @registry
+  end
+
+  def self.wipeout_registry
+    @registry = Registry.new
   end
 
   def self.reset!
-    registry.each { |_, timer| timer.reset! }
+    registry.reset!
   end
 
   def self.register(timer)
-    registry[timer.remote_app_name] ||= timer
+    registry.register(timer)
   end
 
   def self.total_for(remote_app_name)
-    timer = registry[remote_app_name]
-    timer ? timer.total : 0
+    registry.total_for(remote_app_name)
   end
 
   def self.totals
-    registry.each_with_object({}) do |(remote_app_name, timer), acc|
-      acc[remote_app_name] = timer.total
-    end
+    registry.totals
   end
 
   def self.bm(remote_app_name, &block)
-    start(remote_app_name)
-    begin
-      block.call
-    ensure
-      stop(remote_app_name)
-    end
+    registry.bm(remote_app_name, &block)
   end
 
   def self.start(remote_app_name)
-    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
-    registry[remote_app_name].start
+    registry.start(remote_app_name)
   end
 
   def self.stop(remote_app_name)
-    registry[remote_app_name] && registry[remote_app_name].stop
+    registry.stop(remote_app_name)
   end
 
   def self.add_duration(remote_app_name, duration_in_seconds)
-    registry[remote_app_name] ||= GenericTimer.new(remote_app_name)
-    registry[remote_app_name].add(duration_in_seconds)
+    registry.add_duration(remote_app_name, duration_in_seconds)
   end
 end
+
+OverallRequestTimes.wipeout_registry
