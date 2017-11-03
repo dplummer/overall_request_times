@@ -63,5 +63,17 @@ describe OverallRequestTimes::FaradayMiddleware do
 
       Timecop.return
     end
+
+    it 'increments the counter on the number of calls made' do
+      app.do_this_before_complete = -> {
+        1 + 1
+      }
+
+      subject.call(env)
+      subject.call(env)
+      subject.call(env)
+
+      expect(subject.call_count).to eq(3)
+    end
   end
 end

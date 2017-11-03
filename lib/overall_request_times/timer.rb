@@ -16,14 +16,22 @@ module OverallRequestTimes
       end
     end
 
+    def call_count
+      @timer_mutex.synchronize do
+        @counter
+      end
+    end
+
     def reset!
       @timer_mutex.synchronize do
         @total = 0
+        @counter = 0
       end
     end
 
     def add(some_time)
       @timer_mutex.synchronize do
+        @counter += 1
         @total += some_time
       end
     end

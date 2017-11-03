@@ -57,7 +57,8 @@ OverallRequestTimes.stop(:remote_service_name)
 Then to extract the totals to log:
 
 ```ruby
-OverallRequestTimes.total_for(:remote_service_name)
+OverallRequestTimes.total_for(:remote_service_name) # => 12.5
+OverallRequestTimes.call_count_for(:remote_service_name) # => 3
 ```
 
 And reset the totals at the start of your request cycle:

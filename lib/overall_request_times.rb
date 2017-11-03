@@ -28,6 +28,10 @@ module OverallRequestTimes
     registry.total_for(remote_app_name)
   end
 
+  def self.call_count_for(remote_app_name)
+    registry.call_count_for(remote_app_name)
+  end
+
   def self.totals
     registry.totals
   end

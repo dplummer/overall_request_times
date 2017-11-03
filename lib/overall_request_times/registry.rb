@@ -31,6 +31,13 @@ module OverallRequestTimes
       end
     end
 
+    def call_count_for(remote_app_name)
+      @mutex.synchronize do
+        timer = @registry[remote_app_name]
+        timer ? timer.call_count : 0
+      end
+    end
+
     def totals
       @mutex.synchronize do
         @registry.each_with_object({}) do |(remote_app_name, timer), acc|
