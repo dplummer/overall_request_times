@@ -46,6 +46,14 @@ module OverallRequestTimes
       end
     end
 
+    def totals_and_counts
+      @mutex.synchronize do
+        @registry.each_with_object({}) do |(remote_app_name, timer), acc|
+          acc[remote_app_name] = {total: timer.total, call_count: timer.call_count}
+        end
+      end
+    end
+
     def bm(remote_app_name, &block)
       start(remote_app_name)
       begin

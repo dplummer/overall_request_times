@@ -36,6 +36,10 @@ module OverallRequestTimes
     registry.totals
   end
 
+  def self.totals_and_counts
+    registry.totals_and_counts
+  end
+
   def self.bm(remote_app_name, &block)
     registry.bm(remote_app_name, &block)
   end
