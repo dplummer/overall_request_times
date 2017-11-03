@@ -5,10 +5,6 @@ describe OverallRequestTimes do
     OverallRequestTimes.wipeout_registry
   end
 
-  after(:each) do
-    Timecop.return
-  end
-
   it 'has a version number' do
     expect(OverallRequestTimes::VERSION).not_to be nil
   end
